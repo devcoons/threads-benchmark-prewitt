@@ -22,18 +22,16 @@ INCLUDES=$(INC:%=-I%)
 
 # Compiler Flags
 PFLAGS=-pthread
+LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS)
 CFLAGS=
-CFLAGS+= $(INCLUDES)
-CFLAGS+=
 EFLAGS=-fno-inline -Wall -Werror -O0
 LFLAGS=-lm -lextend -lrt -fopenmp
-LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS)
 
 # Compiling Process
 all: $(PRJNAME) clean
 
 $(PRJNAME): $(O_FILES)
-	$(CC) $(PFLAGS) $(LDFLAGS) $(CFLAGS) -o $(BINDIR)/$@ $^ $(EFLAGS) $(LFLAGS)
+	$(CC) $(PFLAGS) $(LDFLAGS) $(INCLUDES) $(CFLAGS) -o $(BINDIR)/$@ $^ $(EFLAGS) $(LFLAGS)
 
 %.o: %.c
 	$(CC) $(PFLAGS) -c $(INCLUDES) -o $@ $< $(LFLAGS)
