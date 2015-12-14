@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
-#include <libeasy.h>
+#include <extend.h>
 #include "bitmap.h"
 #include "thread.h"
 
@@ -30,14 +30,14 @@
 			switch (opt) 
 			{
 				case 'i' :
-					in_img = str_merge(in_img,optarg,NULL);
+					in_img = str_merge(2,in_img,optarg);
 					bitmap = Load_Image(in_img);
 					break;
 				case 't' : 
 					threads=atoi(optarg);
 					break;
 				case 'o' : 
-					out_img = str_merge(out_img,optarg,NULL);
+					out_img = str_merge(2,out_img,optarg);
 					break;
 				case 'j' : 
 					json_format=1;

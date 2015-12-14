@@ -1,38 +1,36 @@
-#include "thread.h"
 #include "prewitt.h"
+#include "thread.h"
+#include "bitmap.h"
 
 	void * Thread(void * arg)
 	{
-		int i,j;
 		thread_arg_t * args = (thread_arg_t*)arg;
-		
-		pthread_barrier_wait (&BEGINBRR);	
-			PrewittFilter(args->bitmap, args->start_width, args->end_width);
+		pthread_barrier_wait (&BEGINBRR);
+			Prewitt_Filter(args->bitmap, args->start_width, args->end_width);
 		pthread_barrier_wait (&ENDBRR);
+		return NULL;
 	}
-	
+
 	unsigned long Thread_Pool_Manager(struct bitmap_t * bitmap, int threads)
 	{
 		int i=0;
 		thread_arg_t args[threads];
 		struct timespec time_begin, time_end;
-		
 		pthread_barrier_init (&BEGINBRR, NULL, threads+1);
 		pthread_barrier_init (&ENDBRR,   NULL, threads+1);
-		
 		for(i=0;i<threads;i++)
 		{
 			args[i].start_width = (i == 0 ? 0 : args[i-1].end_width + 1);
 			args[i].end_width = (i+1) * (bitmap->dheader.width/threads);
 			args[i].bitmap = bitmap;
 		}
-		
+
 		if( (TID = (pthread_t *)malloc(threads * sizeof(pthread_t))) == NULL )
 			return -1;
-		
+
 		for(i=0;i<threads;i++)
 			pthread_create(&TID[i], NULL, Thread,(void*)&args[i]);
-		
+
 			pthread_barrier_wait (&BEGINBRR);
 				clock_gettime(CLOCK_MONOTONIC, &time_begin);
 			pthread_barrier_wait (&ENDBRR);

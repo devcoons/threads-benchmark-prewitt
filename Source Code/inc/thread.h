@@ -1,6 +1,7 @@
 #ifndef _THREAD_H
 	#define _THREAD_H
 		#include <time.h>
+		#include <pthread.h>
 		#include <float.h>
 		#include "bitmap.h"
 		

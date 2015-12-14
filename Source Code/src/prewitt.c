@@ -1,6 +1,6 @@
 #include "prewitt.h"
 
-	void PrewittFilter(bitmap_t * bitmap, int swidth,int ewidth)
+	void Prewitt_Filter(bitmap_t * bitmap, int swidth,int ewidth)
 	{
 		bmp_pixel_t ** result;
 		float accum1 = 0, accum2 = 0;
